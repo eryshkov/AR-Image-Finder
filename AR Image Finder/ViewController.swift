@@ -11,10 +11,11 @@ import SceneKit
 import ARKit
 
 class ViewController: UIViewController, ARSCNViewDelegate {
-
+    
     @IBOutlet var sceneView: ARSCNView!
     
     var moneyCount: Int = 0
+    var anchorsArray = [ARAnchor]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,9 +83,29 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let planeNode = SCNNode(geometry: plane)
         planeNode.opacity = 0.25
         planeNode.eulerAngles.x = -Float.pi / 2
-        moneyCount += 1;print(moneyCount)
-        planeNode.name = "\(moneyCount) \(referenceImage.name ?? "")"
-        node.addChildNode(planeNode)
+        
+        if isCoordsEqual(element: imageAnchor, accuracy: 0.05, array: anchorsArray) {
+            sceneView.session.remove(anchor: imageAnchor)
+        }else{
+            moneyCount += 1
+            anchorsArray.append(imageAnchor)
+            planeNode.name = "\(moneyCount) \(referenceImage.name ?? "")"
+            node.addChildNode(planeNode)
+        }
+        print("moneyCount=\(moneyCount)")
+        print("anchors=\(anchorsArray.count)")
+    }
+    
+    func isCoordsEqual(element: ARAnchor, accuracy: Float, array: [ARAnchor]) -> Bool {
+        
+        for item in array {
+            if (abs(element.transform.columns.3.x - item.transform.columns.3.x) <= accuracy) &&
+                (abs(element.transform.columns.3.y - item.transform.columns.3.y) <= accuracy) &&
+                (abs(element.transform.columns.3.z - item.transform.columns.3.z) <= accuracy)
+            {return true}
+        }
+        
+        return false
     }
     
     func session(_ session: ARSession, didFailWithError error: Error) {
