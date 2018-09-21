@@ -14,6 +14,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
     
+    var moneyCount: Int = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -80,6 +82,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let planeNode = SCNNode(geometry: plane)
         planeNode.opacity = 0.25
         planeNode.eulerAngles.x = -Float.pi / 2
+        moneyCount += 1;print(moneyCount)
+        planeNode.name = "\(moneyCount) \(referenceImage.name ?? "")"
         node.addChildNode(planeNode)
     }
     
