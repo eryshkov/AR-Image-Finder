@@ -5,6 +5,12 @@
   },
   "resources" : [
     {
+      "filename" : "100_L.arreferenceimage"
+    },
+    {
+      "filename" : "100_R.arreferenceimage"
+    },
+    {
       "filename" : "sushi.arreferenceimage"
     }
   ]
